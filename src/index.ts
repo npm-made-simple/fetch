@@ -42,11 +42,11 @@ export class FetcherBuilder {
         const response = await nodeFetch(url, { ...init as NodeFetchRequestInit, headers });
 
         if (!response.ok) {
-            this.logger.error("Failed to fetch %s %s Status: %s %s", chalk.bold(url), init?.method ?? "GET", response.status, response.statusText);
+            this.logger.error(`Failed to fetch ${chalk.bold(url)} ${init?.method ?? "GET"} Status: ${response.status} ${response.statusText}`);
             throw new Error(response.statusText);
         }
 
-        this.logger.debug("Fetched %s %s Status: %s %s", chalk.bold(url), init?.method ?? "GET", response.status, response.statusText);
+        this.logger.debug(`Fetched ${chalk.bold(url)} ${init?.method ?? "GET"} Status: ${response.status} ${response.statusText}`);
         return await response.json() as T | null;
     }
 
