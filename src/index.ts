@@ -1,7 +1,14 @@
 import nodeFetch from "node-fetch";
 import { LoggerBuilder, chalk } from "@made-simple/logging";
 
-import type { RequestInfo, RequestInit } from "node-fetch";
+import type {
+    RequestInfo,
+    RequestInit as NodeFetchRequestInit
+} from "node-fetch";
+
+export interface RequestInit extends Omit<NodeFetchRequestInit, "body"> {
+    body?: Record<string, any> | string;
+}
 
 export class FetcherBuilder {
     protected logger = new LoggerBuilder("fetch", chalk.yellowBright);
@@ -32,7 +39,7 @@ export class FetcherBuilder {
             init.body = JSON.stringify(init.body);
         }
 
-        const response = await nodeFetch(url, { ...init, headers });
+        const response = await nodeFetch(url, { ...init as NodeFetchRequestInit, headers });
 
         if (!response.ok) {
             this.logger.error("Failed to fetch %s %s Status: %s %s", chalk.bold(url), init?.method ?? "GET", response.status, response.statusText);
